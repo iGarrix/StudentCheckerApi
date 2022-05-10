@@ -6,6 +6,9 @@ namespace StudentAPI.Entities.IdentityEntities
     {
         public int TimePass { get; set; }
 
+        public Guid GroupId { get; set; }
+        public Group Group { get; set; }
+
 
         public ICollection<StudentLesson> StudentLessons { get; set; }
         public ICollection<UniversityTracker> UniversityTrackers { get; set; }

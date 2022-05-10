@@ -12,8 +12,8 @@ using StudentAPI.Data;
 namespace StudentAPI.Migrations
 {
     [DbContext(typeof(StudentDataContext))]
-    [Migration("20220510120630_test5")]
-    partial class test5
+    [Migration("20220510153052_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -173,6 +173,24 @@ namespace StudentAPI.Migrations
                     b.ToTable("Courses");
                 });
 
+            modelBuilder.Entity("StudentAPI.Entities.Group", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Create")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Groups");
+                });
+
             modelBuilder.Entity("StudentAPI.Entities.IdentityEntities.Person", b =>
                 {
                     b.Property<Guid>("Id")
@@ -228,6 +246,10 @@ namespace StudentAPI.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -351,16 +373,39 @@ namespace StudentAPI.Migrations
                     b.ToTable("StudentLessons");
                 });
 
+            modelBuilder.Entity("StudentAPI.Entities.UniversityTracker", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Create")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("StudentId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("Visit")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("UniversityTrackers");
+                });
+
             modelBuilder.Entity("StudentAPI.Entities.IdentityEntities.Student", b =>
                 {
                     b.HasBaseType("StudentAPI.Entities.IdentityEntities.Person");
 
-                    b.Property<string>("Surname")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("TimePass")
                         .HasColumnType("int");
+
+                    b.HasIndex("GroupId");
 
                     b.HasDiscriminator().HasValue("Student");
                 });
@@ -368,11 +413,6 @@ namespace StudentAPI.Migrations
             modelBuilder.Entity("StudentAPI.Entities.IdentityEntities.Teacher", b =>
                 {
                     b.HasBaseType("StudentAPI.Entities.IdentityEntities.Person");
-
-                    b.Property<string>("Surname")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Teacher_Surname");
 
                     b.HasDiscriminator().HasValue("Teacher");
                 });
@@ -485,11 +525,38 @@ namespace StudentAPI.Migrations
                     b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("StudentAPI.Entities.UniversityTracker", b =>
+                {
+                    b.HasOne("StudentAPI.Entities.IdentityEntities.Student", "Student")
+                        .WithMany("UniversityTrackers")
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
+                });
+
+            modelBuilder.Entity("StudentAPI.Entities.IdentityEntities.Student", b =>
+                {
+                    b.HasOne("StudentAPI.Entities.Group", "Group")
+                        .WithMany("Students")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Group");
+                });
+
             modelBuilder.Entity("StudentAPI.Entities.Course", b =>
                 {
                     b.Navigation("Lessons");
 
                     b.Navigation("ScheduleCourses");
+                });
+
+            modelBuilder.Entity("StudentAPI.Entities.Group", b =>
+                {
+                    b.Navigation("Students");
                 });
 
             modelBuilder.Entity("StudentAPI.Entities.Lesson", b =>
@@ -505,6 +572,8 @@ namespace StudentAPI.Migrations
             modelBuilder.Entity("StudentAPI.Entities.IdentityEntities.Student", b =>
                 {
                     b.Navigation("StudentLessons");
+
+                    b.Navigation("UniversityTrackers");
                 });
 
             modelBuilder.Entity("StudentAPI.Entities.IdentityEntities.Teacher", b =>

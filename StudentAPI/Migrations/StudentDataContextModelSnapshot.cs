@@ -171,6 +171,24 @@ namespace StudentAPI.Migrations
                     b.ToTable("Courses");
                 });
 
+            modelBuilder.Entity("StudentAPI.Entities.Group", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("Create")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Groups");
+                });
+
             modelBuilder.Entity("StudentAPI.Entities.IdentityEntities.Person", b =>
                 {
                     b.Property<Guid>("Id")
@@ -379,8 +397,13 @@ namespace StudentAPI.Migrations
                 {
                     b.HasBaseType("StudentAPI.Entities.IdentityEntities.Person");
 
+                    b.Property<Guid>("GroupId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("TimePass")
                         .HasColumnType("int");
+
+                    b.HasIndex("GroupId");
 
                     b.HasDiscriminator().HasValue("Student");
                 });
@@ -511,11 +534,27 @@ namespace StudentAPI.Migrations
                     b.Navigation("Student");
                 });
 
+            modelBuilder.Entity("StudentAPI.Entities.IdentityEntities.Student", b =>
+                {
+                    b.HasOne("StudentAPI.Entities.Group", "Group")
+                        .WithMany("Students")
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Group");
+                });
+
             modelBuilder.Entity("StudentAPI.Entities.Course", b =>
                 {
                     b.Navigation("Lessons");
 
                     b.Navigation("ScheduleCourses");
+                });
+
+            modelBuilder.Entity("StudentAPI.Entities.Group", b =>
+                {
+                    b.Navigation("Students");
                 });
 
             modelBuilder.Entity("StudentAPI.Entities.Lesson", b =>

@@ -64,6 +64,15 @@ namespace StudentAPI.Data
 
                     db.SaveChanges();
                 }
+                if (!db.Groups.Any())
+                {
+                    db.Groups.Add(new Group()
+                    {
+                        Create = DateTime.Now,
+                        Name = "PD1"
+                    });
+                    db.SaveChanges();
+                }
                 if (!dbPerson.Users.Any())
                 {
                     var bob = new Student()
@@ -76,6 +85,7 @@ namespace StudentAPI.Data
                         Email = "bob@gmail.com",
                         PhoneNumber = "1534567890",
                         TimePass = 5,
+                        Group = db.Groups.FirstOrDefault(f => f.Name == "PD1"),
                     };
                     var ernie = new Student()
                     {
@@ -87,6 +97,7 @@ namespace StudentAPI.Data
                         Email = "ernie@gmail.com",
                         PhoneNumber = "1234567891",
                         TimePass = 8,
+                        Group = db.Groups.FirstOrDefault(f => f.Name == "PD1"),
                     };
                     var resultBob = dbPerson.CreateAsync(bob, "1234").Result;
                     var resultErnie = dbPerson.CreateAsync(ernie, "1234").Result;

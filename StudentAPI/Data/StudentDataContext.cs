@@ -24,6 +24,9 @@ namespace StudentAPI.Data
             builder.Entity<Lesson>()
                 .HasOne(o => o.Course).WithMany(m => m.Lessons).HasForeignKey(o => o.CourseId);
 
+            builder.Entity<Student>()
+                .HasOne(o => o.Group).WithMany(m => m.Students).HasForeignKey(o => o.GroupId);
+
             builder.Entity<UniversityTracker>()
                .HasOne(o => o.Student).WithMany(m => m.UniversityTrackers).HasForeignKey(o => o.StudentId);
 
@@ -48,6 +51,7 @@ namespace StudentAPI.Data
         public DbSet<Schedule> Schedules { get; set; }
         public DbSet<Course> Courses { get; set; }
         public DbSet<Lesson> Lessons { get; set; }
+        public DbSet<Group> Groups { get; set; }
         public DbSet<ScheduleCourse> ScheduleCourses { get; set; }
         public DbSet<StudentLesson> StudentLessons { get; set; }
         public DbSet<UniversityTracker> UniversityTrackers { get; set; }

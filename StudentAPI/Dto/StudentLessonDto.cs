@@ -1,9 +1,10 @@
 ﻿namespace StudentAPI.Dto
 {
-    public class UniversityDto
+    public class StudentLessonDto
     {
         public Guid Id { get; set; }
-        public bool Visit { get; set; }
         public StudentDto StudentDto { get; set; }
+        public LessonDto LessonDto { get; set; }
+        public bool LessonVisit { get; set; }
     }
 }

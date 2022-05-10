@@ -97,8 +97,52 @@ namespace StudentAPI.Helper
         public UniversityProfile()
         {
             CreateMap<UniversityTracker, UniversityDto>()
+                .ForMember(dest => dest.Id, source => source.MapFrom(src => src.Id))
                .ForMember(dest => dest.Visit, source => source.MapFrom(src => src.Visit))
                .ForMember(dest => dest.StudentDto, source => source.MapFrom(src => src.Student));
+        }
+    }
+
+    public class ScheduleProfile : Profile
+    {
+        public ScheduleProfile()
+        {
+            CreateMap<Schedule, ScheduleDto>()
+                .ForMember(dest => dest.Id, source => source.MapFrom(src => src.Id))
+               .ForMember(dest => dest.Date, source => source.MapFrom(src => src.Date));
+        }
+    }
+
+    public class LessonProfile : Profile
+    {
+        public LessonProfile()
+        {
+            CreateMap<Lesson, LessonDto>()
+                .ForMember(dest => dest.Id, source => source.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Name, source => source.MapFrom(src => src.Name))
+               .ForMember(dest => dest.StartTime, source => source.MapFrom(src => src.StartTime));
+        }
+    }
+
+    public class GroupProfile : Profile
+    {
+        public GroupProfile()
+        {
+            CreateMap<Group, GroupDto>()
+                .ForMember(dest => dest.Id, source => source.MapFrom(src => src.Id))
+                .ForMember(dest => dest.Name, source => source.MapFrom(src => src.Name));
+        }
+    }
+
+    public class StudentLessonProfile : Profile
+    {
+        public StudentLessonProfile()
+        {
+            CreateMap<StudentLesson, StudentLessonDto>()
+                .ForMember(dest => dest.Id, source => source.MapFrom(src => src.Id))
+                .ForMember(dest => dest.LessonVisit, source => source.MapFrom(src => src.LessonVisit))
+                .ForMember(dest => dest.StudentDto, source => source.MapFrom(src => src.Student))
+                .ForMember(dest => dest.LessonDto, source => source.MapFrom(src => src.Lesson));
         }
     }
 }

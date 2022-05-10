@@ -33,6 +33,8 @@ builder.Services.AddIdentity<Person, IdentityRole<Guid>>(opt =>
 builder.Services.AddScoped<JwtHelper>();
 builder.Services.AddTransient<AuthRepository>();
 builder.Services.AddTransient<UniversityRepository>();
+builder.Services.AddTransient<ScheduleRepository>();
+builder.Services.AddTransient<LessonRepository>();
 
 builder.Services.AddDbContext<StudentDataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
