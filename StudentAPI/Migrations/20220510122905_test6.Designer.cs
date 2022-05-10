@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentAPI.Data;
 
@@ -11,9 +12,10 @@ using StudentAPI.Data;
 namespace StudentAPI.Migrations
 {
     [DbContext(typeof(StudentDataContext))]
-    partial class StudentDataContextModelSnapshot : ModelSnapshot
+    [Migration("20220510122905_test6")]
+    partial class test6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -353,28 +355,6 @@ namespace StudentAPI.Migrations
                     b.ToTable("StudentLessons");
                 });
 
-            modelBuilder.Entity("StudentAPI.Entities.UniversityTracker", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("Create")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("StudentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("Visit")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("UniversityTrackers");
-                });
-
             modelBuilder.Entity("StudentAPI.Entities.IdentityEntities.Student", b =>
                 {
                     b.HasBaseType("StudentAPI.Entities.IdentityEntities.Person");
@@ -500,17 +480,6 @@ namespace StudentAPI.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("StudentAPI.Entities.UniversityTracker", b =>
-                {
-                    b.HasOne("StudentAPI.Entities.IdentityEntities.Student", "Student")
-                        .WithMany("UniversityTrackers")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Student");
-                });
-
             modelBuilder.Entity("StudentAPI.Entities.Course", b =>
                 {
                     b.Navigation("Lessons");
@@ -531,8 +500,6 @@ namespace StudentAPI.Migrations
             modelBuilder.Entity("StudentAPI.Entities.IdentityEntities.Student", b =>
                 {
                     b.Navigation("StudentLessons");
-
-                    b.Navigation("UniversityTrackers");
                 });
 
             modelBuilder.Entity("StudentAPI.Entities.IdentityEntities.Teacher", b =>
