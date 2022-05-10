@@ -24,17 +24,33 @@ namespace StudentAPI.Repositories
 
         public IEnumerable<ScheduleResponse> GetSchedule()
         {
-            var dbfind = _db.ScheduleCourses.Include(i => i.Schedule).Include(i => i.Course).ToList();
+            //var dbfind = _db.ScheduleCourses.Include(i => i.Schedule).Include(i => i.Course).ToList();
+            //var result = new List<ScheduleResponse>();
+            //foreach (var item in _db.Schedules.ToList())
+            //{
+            //    var tempList = new List<LessonDto>();
+            //    foreach (var it in dbfind.Select(s => s.Course))
+            //    {
+            //        foreach (var it2 in _db.Lessons.Include(i => i.Course).Where(w => w.Course.Id == it.Id))
+            //        {
+            //            tempList.Add(it2.ToDto<Lesson, LessonDto>(_mapper));
+            //        }
+            //    }
+            //    result.Add(new ScheduleResponse()
+            //    {
+            //        ScheduleDto = item.ToDto<Schedule, ScheduleDto>(_mapper),
+            //        LessonDtos = tempList,
+            //    });
+            //}
+            //return result;
+
             var result = new List<ScheduleResponse>();
             foreach (var item in _db.Schedules.ToList())
             {
                 var tempList = new List<LessonDto>();
-                foreach (var it in dbfind.Select(s => s.Course))
+                foreach (var item1 in _db.ScheduleCourses.Include(i => i.Schedule).Include(i => i.Course).ThenInclude(i => i.Lessons).Where(w => w.Schedule.Id == item.Id).Select(s => s.Course).Select(s => s.Lessons))
                 {
-                    foreach (var it2 in _db.Lessons.Include(i => i.Course).Where(w => w.Course.Id == it.Id))
-                    {
-                        tempList.Add(it2.ToDto<Lesson, LessonDto>(_mapper));
-                    }
+                    tempList.AddRange(item1.ToList().ToListDto<Lesson, LessonDto>(_mapper));
                 }
                 result.Add(new ScheduleResponse()
                 {
@@ -42,6 +58,7 @@ namespace StudentAPI.Repositories
                     LessonDtos = tempList,
                 });
             }
+
             return result;
         }
     }

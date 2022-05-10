@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StudentAPI.Body;
 using StudentAPI.Repositories;
 
 namespace StudentAPI.Controllers
@@ -21,6 +22,34 @@ namespace StudentAPI.Controllers
             try
             {
                 var result = _rep.GetAllLessons();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("GetStudentLessons")]
+        public IActionResult GetStudentLessons(string Id)
+        {
+            try
+            {
+                var result = _rep.GetStudentLesson(Id);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("LessonsTrackerChange")]
+        public async Task<IActionResult> LessonsTrackerChange([FromBody] ChangeLessonBody changeLessonBody)
+        {
+            try
+            {
+                var result =  await _rep.LessonChange(changeLessonBody.Id, changeLessonBody.Email, changeLessonBody.LessonVisit);
                 return Ok(result);
             }
             catch (Exception ex)

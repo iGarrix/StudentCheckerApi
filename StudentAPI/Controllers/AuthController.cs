@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StudentAPI.Body;
 using StudentAPI.Dto;
 using StudentAPI.Entities.IdentityEntities;
 using StudentAPI.Helper;
@@ -19,11 +20,11 @@ namespace StudentAPI.Controllers
         }
 
         [HttpPost("LoginStudent")]
-        public async Task<IActionResult> LoginStudent(string email, string password)
+        public async Task<IActionResult> LoginStudent([FromBody] AuthBody authBody)
         {
             try
             {
-                var result = await _rep.Login<Student, StudentDto>(email, password);
+                var result = await _rep.Login<Student, StudentDto>(authBody.Email, authBody.Password);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -33,11 +34,11 @@ namespace StudentAPI.Controllers
         }
 
         [HttpPost("LoginTeacher")]
-        public async Task<IActionResult> LoginTeacher(string email, string password)
+        public async Task<IActionResult> LoginTeacher([FromBody] AuthBody authBody)
         {
             try
             {
-                var result = await _rep.Login<Teacher, TeacherDto>(email, password);
+                var result = await _rep.Login<Teacher, TeacherDto>(authBody.Email, authBody.Password);
                 return Ok(result);
             }
             catch (Exception ex)

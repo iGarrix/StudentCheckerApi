@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StudentAPI.Body;
 using StudentAPI.Repositories;
 
 namespace StudentAPI.Controllers
@@ -29,11 +30,11 @@ namespace StudentAPI.Controllers
         }
 
         [HttpPost("StudentTracker")]
-        public async Task<IActionResult> StudentTracker(string email, bool visit)
+        public async Task<IActionResult> StudentTracker([FromBody] StudentTrackerBody studentTrackerBody)
         {
             try
             {
-                var result = await _rep.ChangeChecker(email, visit);
+                var result = await _rep.ChangeChecker(studentTrackerBody.Email, studentTrackerBody.Visit);
                 return Ok(result);
             }
             catch (Exception ex)
